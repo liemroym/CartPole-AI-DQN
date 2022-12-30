@@ -8,11 +8,11 @@ np.set_printoptions(threshold=sys.maxsize)
 
 from q_model import Model, QTrainer
 
-MAX_MEMORY = 10_000
-BATCH_SIZE = 1_000
+MAX_MEMORY = 20_000
+BATCH_SIZE = 5_000
 GAMMA = 0.99
 LEARNING_RATE = 0.0001
-N_EXPLORATION = 200
+N_EXPLORATION = 100
 
 class Agent:
     def __init__(self, state_size=None, action_size=None, shared_model=None, load_model=False):

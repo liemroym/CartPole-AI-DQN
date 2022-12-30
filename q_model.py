@@ -16,13 +16,14 @@ class Model(nn.Module):
 
         self.linear_in = nn.Linear(input_size, 24)
         self.linear2 = nn.Linear(24, 24)
+        self.linear3 = nn.Linear(24, 24)
         self.linear_out = nn.Linear(24, output_size)
 
     def forward(self, x):
         x = F.relu(self.linear_in(x))
         x = F.relu(self.linear2(x))
-        # x = F.relu(self.linear3(x))
-        x = F.relu(self.linear_out(x))
+        x = F.relu(self.linear3(x))
+        x = self.linear_out(x)
 
         return x
 
@@ -64,10 +65,13 @@ class QTrainer:
             else:
                 # The label for quality of this action is current reward + maximum quality of next action
                 # Quality is high if reward is high and there's a high quality possible move for next state
+                # print(q_old[idx], self.model(next_state[idx]))
+                # print()
                 q_new[idx][action[idx].argmax()] = reward[idx] + self.gamma * torch.max(self.model(next_state[idx]))
         
-        loss = self.loss_function(q_old, q_new)
         self.optimizer.zero_grad()
+        # print(q_old, q_new)
+        loss = self.loss_function(q_old, q_new)
         # print("Loss: ", loss.item(), "Q Old:", q_old[0], "Q New:", q_new[0], "\n")
         
         loss.backward()

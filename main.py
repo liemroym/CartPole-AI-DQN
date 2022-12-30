@@ -37,7 +37,7 @@ class TrainProcess:
             # new_state = 2.*(new_state - np.min(new_state))/np.ptp(new_state)-1
             
             if (finished or truncated):
-                reward = -1
+                reward = -5
             game_reward += reward
 
             transition = (prev_state, action, new_state, reward, finished or truncated)
@@ -53,16 +53,6 @@ class TrainProcess:
                 avg_reward_list.append(np.mean(reward_list))
                 
                 # print(f"Game: {n_game} --> Score: {self.env.get_score()}, Fitness: {self.env.get_fitness()}")
-                display.clear_output(wait=True)
-                display.display(plt.gcf())
-                plt.clf()
-                plt.title('Training...')
-                plt.xlabel('Number of Games')
-                plt.ylabel('Loss')
-                plt.plot(reward_list)
-                plt.plot(avg_reward_list)
-                plt.show(block=False)
-                plt.pause(.1)
 
                 print(f"Game: {n_game} --> Score: {game_reward}")
                 max_reward = max(max_reward, game_reward)
@@ -73,6 +63,17 @@ class TrainProcess:
         
         print(f"Process {self.id} finished. Max score: {max_reward}")
 
+        while True:
+            display.clear_output(wait=True)
+            display.display(plt.gcf())
+            plt.clf()
+            plt.title('Training...')
+            plt.xlabel('Number of Games')
+            plt.ylabel('Loss')
+            plt.plot(reward_list)
+            plt.plot(avg_reward_list)
+            plt.show(block=False)
+            plt.pause(.1)
         
 if __name__ == "__main__":
     pygame.init()
@@ -80,13 +81,13 @@ if __name__ == "__main__":
     temp = gym.make('CartPole-v1')
     # env action --> Discrete --> int
     model = Model(temp.observation_space.shape[0], temp.action_space.n).double()
-    # model.load()
+    model.load()
     
     del temp
 
     processes = []
-    for i in range(1):
-        p = TrainProcess(id=i, model=model, max_n_game=1_500)
+    for i in range(3):
+        p = TrainProcess(id=i, model=model, max_n_game=200)
         # p.start_process()
         p.process.start()
         processes.append(p)

@@ -1,0 +1,25 @@
+# 3 Processes
+MAX_MEMORY = 20_000
+BATCH_SIZE = 5_000
+GAMMA = 0.99
+LEARNING_RATE = 0.0001
+N_EXPLORATION = 100
+
+finished or truncated --> -5 reward
+
+n_game = 200 episodes
+
+NN model:
+    def __init__(self):
+        self.linear_in = nn.Linear(input_size, 24)
+        self.linear2 = nn.Linear(24, 24)
+        self.linear3 = nn.Linear(24, 24)
+        self.linear_out = nn.Linear(24, output_size)
+
+    def forward(self, x):
+        x = F.relu(self.linear_in(x))
+        x = F.relu(self.linear2(x))
+        x = F.relu(self.linear3(x))
+        x = self.linear_out(x)
+
+        return x
